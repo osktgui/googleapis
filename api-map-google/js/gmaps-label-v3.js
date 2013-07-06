@@ -1,9 +1,9 @@
 // Define the overlay, derived from google.maps.OverlayView
-function Label(opt_options) {
+function Label(opt_options, img_url) {
      // Initialization
      this.setValues(opt_options);
 
-     this.image_ ="images/user.jpg";
+     this.image_ = img_url;
 
      //Create Image
      var img = document.createElement("img");
@@ -13,14 +13,14 @@ function Label(opt_options) {
 
 
      // Here go the label styles
-     var span = this.span_ = document.createElement('span');
-     span.style.cssText = 'position: relative; left: -50%; top: -35px; ' +
-                          'white-space: nowrap;color:#ffffff;' +
-                          'padding: 2px;font-family: Arial; font-weight: bold;' +
-                          'font-size: 12px; background-color:red;border-radius: 20px;';
+     // var span = this.span_ = document.createElement('span');
+     // span.style.cssText = 'position: relative; left: -50%; top: -35px; ' +
+     //                      'white-space: nowrap;color:#ffffff;' +
+     //                      'padding: 2px;font-family: Arial; font-weight: bold;' +
+     //                      'font-size: 12px; background-color:red;border-radius: 20px;';
  
      var div = this.div_ = document.createElement('div');
-     div.appendChild(span);
+     //div.appendChild(span);
      div.appendChild(img);
      div.style.cssText = 'position: absolute; display: none';
 };
@@ -46,13 +46,9 @@ Label.prototype.onAdd = function() {
                function() { 
                     me.draw(); 
                }),
-          google.maps.event.addListener(this, 'mouseover', 
+          google.maps.event.addListener(this, 'mouseout', 
                function(){ 
                     alert("asdfsadfasd"); 
-               }),
-          google.maps.event.addListener(this, 'click', 
-               function(){ 
-                    alert("label"); 
                })
      ];
 };
@@ -76,7 +72,7 @@ Label.prototype.draw = function() {
      div.style.top = position.y + 'px';
      div.style.display = 'block';
      div.style.zIndex = this.get('zIndex'); //ALLOW LABEL TO OVERLAY MARKER
-     this.span_.innerHTML = this.get('text').toString();
+     //this.span_.innerHTML = this.get('text').toString();
 };
 
 

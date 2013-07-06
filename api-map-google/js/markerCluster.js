@@ -1,3 +1,5 @@
+
+var list_label = [];
 function initialize(){
     // style 
     var style = [{
@@ -28,12 +30,14 @@ function initialize(){
      
     // Load google map
     var xmap = new google.maps.Map(document.getElementById("map"), {
-        zoom:2,
+        zoom:1,
         center:map_center,
         mapTypeId:google.maps.MapTypeId.ROADMAP,
         panControl:false,
         streetViewControl:false,
-        mapTypeControl:false
+        mapTypeControl:false,
+        maxZoom: 15,
+        minZoom: 1
     });
 
     //create Image Marker
@@ -45,30 +49,19 @@ function initialize(){
     var pos;
     var marker;
     var marker_list = [];
+    var marker_custom = [];
     for (var i = 0; i < 100; i++) {
         pos = new google.maps.LatLng(Math.floor(Math.random() * 50), Math.floor(Math.random() * 100));
         marker = new google.maps.Marker({
             position:pos,
             map:xmap,
-            title:''+i
-        });
-
-
-        // var label = new Label({
-        //     map:xmap
-        // });
-        
-        // label.set('zIndex', 1234);
-        // label.bindTo('position', marker, 'position');
-        // label.bindTo('clickable', marker);
-        // label.set('text', ''+i);
+            title:''+i,
+            image:"http://sepp.pe/wp-content/themes/sepp/images/social/facebook.png"
+        }); 
 
         var storyClick = new Function("event", "alert('Click on marker " + i + " ');");
 
-        google.maps.event.addListener(marker, 'click', storyClick);
-        // google.maps.event.addListener(label, 'click', function(){ 
-        //     alert('mouserover label');
-        // });
+        google.maps.event.addListener(marker, 'click', storyClick); 
         marker_list.push(marker);
     }
      // agregar un info de marker
@@ -101,20 +94,59 @@ function initialize(){
              // });
              // marker.setMap(xmap);
 
-            marker = new google.maps.Marker({
-                position:cluster.getCenter(),
-                map:xmap,
-                title:''+i
-            });
+            // marker = new google.maps.Marker({
+            //     position:cluster.getCenter(),
+            //     map:xmap,
+            //     title:''+i
+            // });
 
-            var label = new Label({
-                map:xmap
-            });
+            // var label = new Label({
+            //     map:xmap
+            // });
             
-            label.set('zIndex', 1234);
-            label.bindTo('position', marker, 'position');
-            label.bindTo('clickable', marker);
-            label.set('text', ''+i);
+            // label.set('zIndex', 1234);
+            // label.bindTo('position', marker, 'position');
+            // label.bindTo('clickable', marker);
+            // label.set('text', ''+i);
 
          });
+
+        
+        google.maps.event.addListener(markerCluster, 'mouseout', function(item){  
+            removeLabel();
+            marker_custom = [];
+        });
+
+        google.maps.event.addListener(markerCluster, 'mouseover', function(item){ 
+            //alert("-->" + item);
+            removeLabel();
+            marker_custom = item.markers_;
+            for (var i = 0, total = marker_custom.length; i < total; i++) {
+                var markitem = marker_custom[i];
+
+                var label = new Label({
+                    map:xmap
+                }, markitem.image);
+                 label.set('zIndex', 1234);
+                 label.bindTo('position', markitem, 'position');
+                 label.bindTo('clickable', markitem); 
+                 label.bindTo('mouseout', markerCluster);
+                 label.set('text', '');
+
+                 list_label.push(label);
+            };
+        });
+
+        google.maps.event.addListener(xmap, 'zoom_changed', function(item){ 
+             removeLabel();
+        });
+ }
+ function addLabel(){
+
+ }
+ function removeLabel(){
+    for (var i = 0, total = list_label.length; i < total; i++) {
+                list_label[i].setMap(null);
+    }; 
+    list_label = [];
  }
