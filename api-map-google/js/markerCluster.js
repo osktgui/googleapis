@@ -27,7 +27,7 @@ function initialize(){
     var map_center = new google.maps.LatLng(0.1700235000, 20.7319823000);
      
     // Load google map
-    var map = new google.maps.Map(document.getElementById("map"), {
+    var xmap = new google.maps.Map(document.getElementById("map"), {
         zoom:2,
         center:map_center,
         mapTypeId:google.maps.MapTypeId.ROADMAP,
@@ -35,6 +35,12 @@ function initialize(){
         streetViewControl:false,
         mapTypeControl:false
     });
+
+    //create Image Marker
+    var image = new google.maps.MarkerImage('images/marker-neutral-cluster.png',
+        new google.maps.Size(32, 32),
+        new google.maps.Point(0,0),
+        new google.maps.Point(0, 32));
      
     var pos;
     var marker;
@@ -43,22 +49,26 @@ function initialize(){
         pos = new google.maps.LatLng(Math.floor(Math.random() * 50), Math.floor(Math.random() * 100));
         marker = new google.maps.Marker({
             position:pos,
-            map:map,
-            title:'Title'+i,
-            zIndex: i
+            map:xmap,
+            title:''+i
         });
 
-        var label = new Label({
-               map: map
-        });
+
+        // var label = new Label({
+        //     map:xmap
+        // });
         
-        label.set('zIndex', 1234);
-        label.bindTo('position', marker, 'position');
-        label.set('text', 'Title'+i);
+        // label.set('zIndex', 1234);
+        // label.bindTo('position', marker, 'position');
+        // label.bindTo('clickable', marker);
+        // label.set('text', ''+i);
 
         var storyClick = new Function("event", "alert('Click on marker " + i + " ');");
 
         google.maps.event.addListener(marker, 'click', storyClick);
+        // google.maps.event.addListener(label, 'click', function(){ 
+        //     alert('mouserover label');
+        // });
         marker_list.push(marker);
     }
      // agregar un info de marker
@@ -66,7 +76,8 @@ function initialize(){
      //    content: "contentString"
      // });
         // Add marker clustering
-        var markerCluster = new MarkerClusterer(map, marker_list, {
+        var markerCluster = new MarkerClusterer(xmap, marker_list, {
+            zoom:0,
             gridSize:40,
             minimumClusterSize: 4,
             styles:style,
@@ -84,10 +95,26 @@ function initialize(){
              // infowindow.setPosition(cluster.getCenter());
              // infowindow.open(map);
 
-             var marker = new google.maps.Marker({
-                position: cluster.getCenter(),
-                title:"New Marker"
-             });
-             marker.setMap(map);
+             // var marker = new google.maps.Marker({
+             //    position: cluster.getCenter(),
+             //    title:"New Marker"
+             // });
+             // marker.setMap(xmap);
+
+            marker = new google.maps.Marker({
+                position:cluster.getCenter(),
+                map:xmap,
+                title:''+i
+            });
+
+            var label = new Label({
+                map:xmap
+            });
+            
+            label.set('zIndex', 1234);
+            label.bindTo('position', marker, 'position');
+            label.bindTo('clickable', marker);
+            label.set('text', ''+i);
+
          });
  }

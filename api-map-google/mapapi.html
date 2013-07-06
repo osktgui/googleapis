@@ -1,22 +1,19 @@
 <!DOCTYPE>
 <html>
 	<head>
-		<title>maps</title>
+		<title>maps</title> 
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.0.12/src/markerclusterer_packed.js" ></script>
-		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		<script type="text/javascript" src="js/gmaps-label-v3.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		
 		<script src="js/markerCluster.js" type="text/javascript"></script> 
-		<script type="text/javascript">
-			google.load('maps', '3', {
-				other_params: 'sensor=false'
-			});
-			google.setOnLoadCallback(initialize);
+		<script type="text/javascript">   
 		</script>
 	</head>
-	<body>
-		<div id="map" style="width:500px; height:500px;"></div>
+	<body onload="initialize()">
+		<div id="map" style="height:500px;"></div>
 		
 	</body>
 </html>
